@@ -1,4 +1,4 @@
 class ChefSerializer < ActiveModel::Serializer
-    attributes :id, :name
+    attributes :id, :name, :completed
     has_many :recipes
 end 
