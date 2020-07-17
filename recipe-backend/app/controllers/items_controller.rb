@@ -1,4 +1,4 @@
-lass ItemsController < ApplicationController
+class ItemsController < ApplicationController
 
 
     def index
@@ -23,5 +23,4 @@ lass ItemsController < ApplicationController
         item.update(title: params[:title], product_details: params[:product_details], quanity: params[:quanity], img_url: params[:img_url])
         render json: item
     end
-
-end 
+end

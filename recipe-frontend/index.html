@@ -1,53 +1,46 @@
-<!doctype html>
-
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
-
-  <title>Recipes</title>
-  <meta name="description" content="Your Recipes Tracker">
-  <meta name="author" content="Mariam Haider">
-
-  <link rel="stylesheet" href="styles.css?v=1.0">
-
+    <title>Grocery List</title>
+    <script src="index.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-  <script src="index.js" ></script>
-  <script src="src/recipe.js" ></script>
-  <script src="src/todo.js" ></script>
-  <div class="data-section">
-    <div class="app-wrapper">
-      <div class="header">
-                            
-        <h1>Recipes</h1>
-        
-      
-
-        <a id="recipes" href="#">Recipes</a>
-        <a id="todos" href="#">Todos</a>
-        <a id="newRecipe" href="#createRecipeForm">Create New Recipe</a>
-      </div>
-      <div class="layout-container">
-        <div>
-
-        
-          <div id="main">
-            <ul></ul>
-          </div>
-            <br> 
-            <div id=createRecipeForm>
-            </div>
-            <hr>
-            <div class="footer">
-              <a id="recipes2" href="#">Recipes</a>
-              <a id="todos2" href="#">Todos</a>
-              <a id="newRecipe2" href="#createRecipeForm">Create New Recipe</a>
-             
-            </div>
+    
+    <nav>
+        <div class="logo">
+            <h2><a href="#">Grocery List</a></h2>
         </div>
-      </div>
+     
+    <ul class = "nav-links">
+        
+    <li><a id="produce" href="#" data-id = "1">Produce</a></li>
+    <li><a id="dairy" href="#" data-id = "2">Dairy</a></li>
+    <li><a id="bread" href="#" data-id = "3">Bread</a></li>
+    <li><a id="meat" href="#" data-id = "4">Meat</a></li>
+        
+       
+      
+     
+    </ul>
+    </nav>
+    <a id="recipeForm" href="#">Add Inventory</a>
+
+    <div id = "recipe-Form">
+
+
     </div>
-  </div>
+    <div id="grocery-container">
+       
+    </div>
+
+    <div id="carts-container">
+    
+    </div>
+    
+    
+    
 </body>
+
+
 </html>
