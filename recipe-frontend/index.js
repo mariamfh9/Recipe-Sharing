@@ -152,8 +152,63 @@ function updateGrocery(){
         clearForm()
     })
 }
+
+function deleteItem(){
+
+    event.preventDefault()
+
+    let id = event.target.dataset.id
+    fetch(BASE_URL+"/items/"+id,{
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+         
+        }
+    })
+    .then(event.target.parentElement.remove())
+    make_clickable()
+}
+
 function addGrocery(){
     event.preventDefault()
+
+    let id = Array.from(document.querySelectorAll(".radio-g")).find(r => r.checked).value;
+
+    const grocery = {
+         title: document.getElementById("title").value,
+         product_details:  document.getElementById("product_details").value,
+         price:       document.getElementById("price").value,
+         quanity:    document.getElementById("quanity").value,
+         img_url: document.getElementById("img_url").value,
+         category_id:   id
+
+    }
+
+    fetch(BASE_URL+"/items",{
+        method: "POST",
+        body: JSON.stringify(grocery),
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+
+        }
+    })
+
+    .then(resp => resp.json())
+    .then(json => {
+        json.forEach(g =>{
+            let groc = new Grocery(g)
+            let container = document.querySelector("#grocery-container") 
+            container.innerHTML += groc.renderGrocery()
+            
+            clearForm()
+            make_clickable()
+            
+        })
+        
+        
+    })
 
 }
 
