@@ -3,16 +3,16 @@ class ItemsController < ApplicationController
 
     def index
         items = Item.all
-        render json: items
+        render json: items #RecipeSerializer.new(recipes).to_serialized_json
     end
 
     def create
-        item = Item.create(title: params[:title], product_details: params[:product_details], quanity: params[:quanity], img_url: params[:img_url])
+        item = Item.create(item_params)
     end
 
     def show
         item = Item.find_by(id: params[:id])
-         render json: item 
+         render json: item #RecipeSerializer.new(recipe).to_serialized_json    
     end
 
     def edit
@@ -20,7 +20,25 @@ class ItemsController < ApplicationController
 
     def update
         item = Item.find_by(id: params[:id])
-        item.update(title: params[:title], product_details: params[:product_details], quanity: params[:quanity], img_url: params[:img_url])
+        item.update(item_params)
         render json: item
     end
+
+    def destroy
+        item = Item.find_by(id: params[:id])
+        item.destroy
+    end
+
+
+    private
+
+    def item_params
+        params.require(:item).permit(:title, :product_details,:price, :quanity, :img_url, :category_id)
+    end
+
+    
+
+
+
+
 end
