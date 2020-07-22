@@ -20,6 +20,7 @@ $ bundle install
 Type the following to startup the rails server: 
 
 ```
+$ cd recipe-backend
 $ rails s
 ```
 and open up index.html in the browser to view content.
