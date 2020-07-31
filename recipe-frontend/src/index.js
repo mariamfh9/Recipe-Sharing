@@ -1,366 +1,166 @@
-const BASE_URL = "http://localhost:3000"
+const BASE_URL = "http://localhost:3000";
+const CATEGORIES_URL = `${BASE_URL}/categories`;
+const ITEMS_URL = `${BASE_URL}/items`;
 
+window.addEventListener("load", () => {
+  getCategories();
+  createNewCategory();
+  searchForCategories();
+});
 
+const main = () => {
+  return document.querySelector("main");
+};
 
-class Category{
-    constructor(cat){
-        this.id = cat.id 
-        this.name = cat.name
-    }
+//loads all the categories
+const getCategories = () => {
+  fetch("http://localhost:3000/categories")
+    .then((response) => response.json())
+    .then((data) => renderCategories(data));
+};
 
-    renderCat(){
-        return `
-        <button id="${this.name}" data-id = "${this.id}">${this.name}</button>`
-    }
-}
+const renderCategories = (categoriesData) => {
+  categoriesData.forEach((category) => renderCategoriesCard(category));
+};
 
+const renderCategoriesCard = (categories) => {
+  let categoriesCard = document.createElement("div");
+  categoriesCard.className = "card";
+  categoriesCard.dataset.id = categories.id;
+  categoriesCard.innerHTML = `
+    <p>${categories.name}</p>
+    <button data-category-id=${categories.id}>Add Category</button>
+  `;
+  categoriesCard.lastElementChild.addEventListener("click", displayItemForm);
+  main().appendChild(categoriesCard);
+  let itemsList = document.createElement("ul");
+  itemsList.setAttribute("class", "items-list");
+  itemsList.dataset.id = categories.id;
+  categoriesCard.appendChild(itemsList);
 
+  categories.items.forEach((item) => renderItems(item, itemsList));
+};
 
-class Grocery{
-    constructor(g){
-        this.id = g.id
-        this.title = g.title
-        this.product_details = g.product_details
-        this.quanity = g.quanity
-        this.img_url = g.img_url
-        this.category = g.category 
+const createNewCategory = () => {
+  let form = document.querySelector("a");
+  form.addEventListener("click", displayCategoryForm);
+};
 
-    }
-    renderGrocery(){
-    return `<div class="grocery-card" data-id="${this.id}">
-    <img data-id="${this.id}" src="${this.img_url}"/>
-    <div class="container" >
-    <h2>${this.title}</h2>
-    <p>Price per box: $${this.price}</p>
-    <p>In Stock: ${this.quanity}</p>
-    <p data-category="${this.category.id}">${this.category.name}</p>
-     </div>
-    </div>`
-    }
-}
+const displayCategoryForm = () => {
+  let categoryForm = document.getElementById("category-form");
+  let html = `
+  <form>
+    <label>Name</label>
+    <input type="text" id="name">
+    <input type="submit" value="Submit">
+  </form>
+  `;
 
-function fetchGroceries(){
+  categoryForm.innerHTML = html;
+  document.querySelector("form").addEventListener("submit", createCategory);
+};
 
-    let container = document.getElementById("groceries-container")
-    let div = document.createElement("div")
-    return fetch(BASE_URL+"/items")
+const createCategory = () => {
+  event.preventDefault();
+  console.log("Form clicked");
 
-    .then(resp => resp.json())
+  const category = {
+    name: document.getElementById("name").value,
+  };
 
-    .then(json => {
-        json.forEach(g =>{
-            let groc = new Grocery(g)
-            container.innerHTML += groc.renderGrocery()
-            
-           make_clickable() 
-        })
-        
-        
-    })
-}
+  //fetch POST
+  fetch(CATEGORIES_URL, {
+    method: "POST",
+    body: JSON.stringify(category),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      renderCategoriesCard(data);
+      clearCategoryForm();
+    });
+};
 
+const renderItems = (item, list) => {
+  let itemCard = document.createElement("li");
+  itemCard.id = `item-${item.id}`;
+  itemCard.innerText = `Title: ${item.title}`;
+  let releaseBtn = document.createElement("button");
+  releaseBtn.className = "delete";
+  releaseBtn.dataset.itemId = item.id;
+  releaseBtn.innerText = "Delete";
+  releaseBtn.addEventListener("click", deleteItem);
+  ItemCard.appendChild(releaseBtn);
+  if (!list) {
+    list = event.target.parentElement.lastElementChild;
+  }
+  list.appendChild(itemCard);
+};
 
+const clearForm = () => {
+  let item = document.getElementById("item-form");
+  item.innerHTML = "";
+};
+const clearCategoryForm = () => {
+  let category = document.getElementById("category-form");
+  category.innerHTML = "";
+};
 
+const deleteItem = () => {
+  fetch(ITEMS_URL + `/${event.target.dataset.ItemId}`, {
+    method: "DELETE",
+  }).then(removeItem(event.target.dataset.itemId));
+};
 
-function make_clickable(){
-    
-    let link = document.querySelector(".nav-links")
-    let home = document.querySelector(".logo")
-    home.addEventListener("click", homePage)
-    
-    link.addEventListener("click", displayCats)
-    
-    let cards = document.querySelectorAll(".grocery-card")
-    cards.forEach(card=>{
-        card.querySelector("img").addEventListener("click", displayCard)})
-    
-    let form = document.getElementById("recipeForm")
-    form.addEventListener("click", displayForm)
-    
-}
+const removeItem = (id) => {
+  let cardToRemove = document.getElementById(`item-${id}`);
+  cardToRemove.parentElement.removeChild(cardToRemove);
+};
 
-function displayForm(){
-     
-     clearPage()
-     
-    let formPage = document.getElementById("recipe-Form")
-     fetch(BASE_URL+"/categories")
-     .then(resp => resp.json())
-     .then(categories =>{
-        let category_buttons = categories.map(category=>
-            `
-            <input type="radio" class="radio-g" id="category" name="${category.name}" value="${category.id}"></input>
-            <label>${category.name}</label>`
-        ).join("")
-        let form = `
-    
-        <form>
-            
-        <label>Category</label><br>
-        
-        ${category_buttons}<br>
-    
-        <label>Title:</label>
-        <input type="text" id="title"><br>
-    
-        <label>Product Details:</label>
-        <input type="text" id="product_details"><br>
-    
-        <label>Quanity:</label>
-        <input type="text" id="quanity"><br>
-    
-        <label>Img-url:</label>
-        <input type="text" id="img_url"><br>
-    
-        <input type="submit">
-        </form>   `
-    
-        formPage.innerHTML = form
-    
-        document.querySelector("form").addEventListener("submit", addGrocery)
+const displayItemForm = () => {
+  let itemForm = document.getElementById("item-form");
+  let html = `
+  <form data-category-id="${event.target.dataset.categoryId}">
+    <label>Title</label>
+    <input type="text" id="title">
+    <label>Item Quantity</label>
+    <input type="text" id="body">
+    <input type="submit" value"Submit">
+  </form>
+  `;
 
-     })
-}
+  itemForm.innerHTML = html;
+  document.querySelector("form").addEventListener("submit", createItem);
+};
 
-function editItem(){
-    event.preventDefault()
+const createItem = () => {
+  event.preventDefault();
+  console.log("adding items...");
+  let categoryCardId = event.target.dataset.categoryId;
+  console.log(categoryCardId);
+  const item = {
+    title: document.getElementById("title").value,
+    quantity: document.getElementById("quantity").value,
+    category_id: categoryCardId,
+  };
 
-    let id = event.target.dataset.id
-    let formPage = document.getElementById("recipe-Form")
-    fetch(BASE_URL+"/items/"+id)
-     .then(resp => resp.json())
-     .then(item => { 
-       
+  console.log(item);
 
-        let form =  `<form data-id ="${id}">
-            
-        <label>Title:</label>
-        <input type="text" id="title" value="${item.title}"><br>
-    
-        <label>Product Details:</label>
-        <input type="text" id="product_details" value="${item.product_details}"><br>
-    
-    
-        <label>Quanity:</label>
-        <input type="text" id="quanity" value="${item.quanity}"><br>
-    
-        <label>Img-url:</label>
-        <input type="text" id="img_url" value="${item.img_url}"><br>
-    
-        <input type="submit">
-        </form>   `
-
-        formPage.innerHTML = form
-    
-        document.querySelector("form").addEventListener("submit", updateGrocery)
-     })
-
-}
-
-function updateGrocery(){
-
-    event.preventDefault()
-
-    let id = event.target.dataset.id
-
-    const grocery = {
-        title: document.getElementById("title").value,
-        product_details:  document.getElementById("product_details").value,
-        quanity:    document.getElementById("quanity").value,
-        img_url: document.getElementById("img_url").value,
-        category_id:   id
-
-   }
-    fetch(BASE_URL+"/items/"+id,{
-        method: "PATCH",
-        body: JSON.stringify(grocery),
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })
-    .then(resp => resp.json())
-    .then(data =>{
-        document.querySelector(`.back-card img[data-id="${id}"`).parentElement.innerHTML = `<div class="back-card">
-        <h3>${data.title}</h3>
-        <img data-id="${data.id}" src="${data.img_url}"/>
-        <p>${data.product_details}</p>
-        <p>${data.quanity} boxes in stock</p>
-        <button id="delete" data-id="${data.id}">Delete</button>
-        <button id="update" data-id="${data.id}">Edit</button>
-       </div>
-        `
-        make_clickable()
-        clearForm()
-    })
-}
-
-function deleteItem(){
-
-    event.preventDefault()
-
-    let id = event.target.dataset.id
-    fetch(BASE_URL+"/items/"+id,{
-        method: "DELETE",
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-         
-        }
-    })
-    .then(event.target.parentElement.remove())
-    make_clickable()
-}
-
-
-function addGrocery(){
-
-    event.preventDefault()
-
-    let id = Array.from(document.querySelectorAll(".radio-g")).find(r => r.checked).value;
-
-    const grocery = {
-         title: document.getElementById("title").value,
-         product_details:  document.getElementById("product_details").value,
-         quanity:    document.getElementById("quanity").value,
-         img_url: document.getElementById("img_url").value,
-         category_id:   id
-
-    }
-
-    fetch(BASE_URL+"/items",{
-        method: "POST",
-        body: JSON.stringify(grocery),
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-
-        }
-    })
-
-    .then(resp => resp.json())
-    .then(json => {
-        json.forEach(g =>{
-            let groc = new Grocery(g)
-            let container = document.querySelector("#groceries-container") 
-            container.innerHTML += choco.renderGrocery()
-            
-            clearForm()
-            make_clickable()
-            
-        })
-        
-        
-    })
-
-}
-
-function homePage(){
-    clearPage()
-    clearForm()
-    fetchGroceries()
-}
-
-function clearForm(){
-    let fod = document.getElementById("recipe-Form")
-    fod.innerHTML = ""
-}
-
-
-function clearPage(){
-  let container = document.getElementById("groceries-container")
-  container.innerHTML = ""  
-}
-
-function clearThisPage(){
-    let grocContain = document.getElementById("groc-container")
-    grocContain.innerHTML = ""
-}
-
-function clearLinks(){
-    let links = document.getElementById("linked")
-    linked.innerHTML = ""
-}
-
-function displayCard(){
-    
-    let id = event.target.dataset.id
-    let container = document.getElementById("groceries-container")
-    let div = document.createElement("div")
-    clearPage()
-
-    fetch(BASE_URL+"/items/"+id)
-     .then(resp => resp.json())
- 
-     .then(data => {
-         div.innerHTML += `<div class="back-card">
-         <h3>${data.title}</h3>
-         <img data-id="${data.id}" src="${data.img_url}"/>
-         <p>${data.product_details}</p>
-         <p>${data.quanity} boxes in stock</p>
-         <button id="delete" data-id="${data.id}">Delete</button>
-         <button id="update" data-id="${data.id}">Edit</button>
-        </div>
-         `
-         
-         document.getElementById("delete").addEventListener("click", deleteItem)
-         document.getElementById("update").addEventListener("click", editItem)
-     })
-   
-     container.appendChild(div)
-}
-
-function displayCats(){
-    clearPage()
-    clearForm()
-    let container = document.getElementById("groceries-container")
-    fetch(BASE_URL+"/categories")
-    .then(resp => resp.json())
-    .then(cats =>{
-        cats.forEach(cat =>{
-            let catt = new Category(cat)
-            container.innerHTML += catt.renderCat()
-            make_clickable()
-
-            let linkz = document.querySelectorAll("#groceries-container > button")
-            linkz.forEach(link =>{
-                link.addEventListener("click", displayLinks)
-            })
-
-        }) 
-    })
-}
-
-
-function displayLinks(){
-    
-    
-    let container = document.getElementById("groceries-container")
-    container.innerHTML = "" 
-    let id = event.target.dataset.id
-    return fetch(BASE_URL+"/categories/"+id)
-    .then(resp => resp.json())
-    .then(data => {
-            data.items.forEach(s => {
-            
-            container.innerHTML += `
-            
-            <div data-id="${s.id}" class="category">
-            <h3>${s.title}</h3>
-            <img data-id="${s.id}" src="${s.img_url}"/>
-            <p>Stock Inventory: ${s.quanity}</p>
-            
-            </div>`
-
-            let classes = document.querySelectorAll(".category")
-            classes.forEach(c =>{
-                c.addEventListener("click", displayCard)
-
-            })
-        })
-    })   
-}
-
-window.addEventListener("DOMContentLoaded", ()=>{
-    fetchGroceries() 
-})
+  fetch(ITEMS_URL, {
+    method: "POST",
+    body: JSON.stringify(item),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      let item = new Item(data);
+      item.renderItem();
+      clearForm();
+    });
+};
