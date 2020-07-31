@@ -5,7 +5,6 @@ const ITEMS_URL = `${BASE_URL}/items`;
 window.addEventListener("load", () => {
   getCategories();
   createNewCategory();
-  searchForCategories();
 });
 
 const main = () => {
@@ -29,7 +28,7 @@ const renderCategoriesCard = (categories) => {
   categoriesCard.dataset.id = categories.id;
   categoriesCard.innerHTML = `
     <p>${categories.name}</p>
-    <button data-category-id=${categories.id}>Add Category</button>
+    <button data-category-id=${categories.id}>Add Item</button>
   `;
   categoriesCard.lastElementChild.addEventListener("click", displayItemForm);
   main().appendChild(categoriesCard);
@@ -64,9 +63,13 @@ const createCategory = () => {
   event.preventDefault();
   console.log("Form clicked");
 
-  const category = {
+const category = {
     name: document.getElementById("name").value,
-  };
+};
+
+createNewCategory();
+
+
 
   //fetch POST
   fetch(CATEGORIES_URL, {
@@ -146,7 +149,7 @@ const createItem = () => {
     quantity: document.getElementById("quantity").value,
     category_id: categoryCardId,
   };
-
+  createItem(); 
   console.log(item);
 
   fetch(ITEMS_URL, {

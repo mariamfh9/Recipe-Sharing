@@ -1,0 +1,57 @@
+body {
+    background: url("images/Arteagas-Mexican-Grocery-Store-Background.jpg") no-repeat fixed center;
+      margin: 0;
+      padding: 0;
+    }
+    
+    h1 {
+      font-family: 'Red Rose', cursive;
+      font-size: 45px;
+    }
+  
+    header h2 {
+      padding: 10px;
+      margin: 0;
+    }
+    
+    main {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      grid-gap: 20px;
+      padding-top: 10px;
+      padding-bottom: 30px;
+    }
+    
+    div.card {
+      background-color: #eeeeee;
+      height: 250px;
+      width: 378px;
+      padding: 10px;
+      border-radius: 10px;
+      
+    }
+    
+    p {
+      font-size: 1.5em;
+      color: black;
+      font-family: Helvetica;
+    }
+    
+    li {
+      font-size: 1.05em;
+      list-style: none;
+      padding-right: 20px;
+    }
+    
+    button {
+      font-size: .65em;
+      color: #fff;
+      background-color: black;
+      
+    }
+    
+    button.delete {
+      float: right;
+      background-color: #92db98;
+    }
