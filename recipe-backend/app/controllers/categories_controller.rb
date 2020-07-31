@@ -1,16 +1,32 @@
 class CategoriesController < ApplicationController
-    
+    before_action :set_Category, only: [:show, :update, :destroy]
+  
     def index
-        categories = Category.all
-        render json: categories
+      categories = Category.all
+  
+      render json: categories
     end
-
-    def show
-        category = Category.find_by(id: params[:id])
-        render json: category
-    end 
-    
+  
     def create
-        category = Category.create(name: name)
-    end 
-end
+      category = Category.new(category_params)
+      if category.save
+        render json: category, status: :created
+      else 
+        render json: item.errors, status: :unprocessable_entity
+      end
+    end
+  
+    def show
+      render json: category
+    end
+  
+   private
+      def set_category
+        category = Category.find(params[:id])
+      end
+  
+      def category_params
+        params.require(:category).permit(:name)
+      end
+  end
+  

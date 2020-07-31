@@ -20,9 +20,7 @@ ActiveRecord::Schema.define(version: 2020_07_17_194710) do
 
   create_table "items", force: :cascade do |t|
     t.string "title"
-    t.text "product_details"
     t.integer "quanity"
-    t.string "img_url"
     t.integer "category_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

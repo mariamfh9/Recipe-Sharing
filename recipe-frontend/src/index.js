@@ -362,11 +362,5 @@ function displayLinks(){
 }
 
 window.addEventListener("DOMContentLoaded", ()=>{
-    fetchGroceries()
-    
-    
-    
-    
-    
-    
+    fetchGroceries() 
 })
