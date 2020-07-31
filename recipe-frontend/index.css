@@ -1,8 +1,9 @@
 body {
-    background: url("images/Arteagas-Mexican-Grocery-Store-Background.jpg") no-repeat fixed center;
-      margin: 0;
-      padding: 0;
-    }
+    background: url("images/abstract-blurred-photo-store-with-trolley-department-store-bokeh-background_1980-8.jpg") no-repeat fixed center;
+    
+    background-size: cover;
+    background-repeat: no-repeat;
+}
     
     h1 {
       font-family: 'Red Rose', cursive;

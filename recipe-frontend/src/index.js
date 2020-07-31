@@ -130,7 +130,7 @@ const displayItemForm = () => {
     <label>Title</label>
     <input type="text" id="title">
     <label>Item Quantity</label>
-    <input type="text" id="body">
+    <input type="text" id="quantity">
     <input type="submit" value"Submit">
   </form>
   `;
@@ -138,6 +138,8 @@ const displayItemForm = () => {
   itemForm.innerHTML = html;
   document.querySelector("form").addEventListener("submit", createItem);
 };
+
+//createNewItem(); 
 
 const createItem = () => {
   event.preventDefault();
@@ -149,7 +151,7 @@ const createItem = () => {
     quantity: document.getElementById("quantity").value,
     category_id: categoryCardId,
   };
-  createItem(); 
+  
   console.log(item);
 
   fetch(ITEMS_URL, {
