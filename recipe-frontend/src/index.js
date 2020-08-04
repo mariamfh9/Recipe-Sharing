@@ -5,11 +5,13 @@ const ITEMS_URL = `${BASE_URL}/items`;
 window.addEventListener("load", () => {
   getCategories();
   createNewCategory();
+  searchForCategories();
 });
 
 const main = () => {
-  return document.querySelector("main");
+  return document.querySelector("main"); //DOM Node, JS object
 };
+
 
 //loads all the categories
 const getCategories = () => {
@@ -39,6 +41,7 @@ const renderCategoriesCard = (categories) => {
 
   categories.items.forEach((item) => renderItems(item, itemsList));
 };
+
 
 const createNewCategory = () => {
   let form = document.querySelector("a");
@@ -71,7 +74,7 @@ createNewCategory();
 
 
 
-  //fetch POST
+  //fetch POST, configuration object
   fetch(CATEGORIES_URL, {
     method: "POST",
     body: JSON.stringify(category),
@@ -80,9 +83,10 @@ createNewCategory();
       Accept: "application/json",
     },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      renderCategoriesCard(data);
+    .then((response) => response.json())  //what destination server sent back 
+                                          //turns body of response into javascript object
+    .then((data) => {   
+      renderCategoriesCard(data);  
       clearCategoryForm();
     });
 };
@@ -92,11 +96,11 @@ const renderItems = (item, list) => {
   itemCard.id = `item-${item.id}`;
   itemCard.innerText = `Title: ${item.title}`;
   let releaseBtn = document.createElement("button");
-  releaseBtn.className = "delete";
+  releaseBtn.className = "delete"; 
   releaseBtn.dataset.itemId = item.id;
   releaseBtn.innerText = "Delete";
   releaseBtn.addEventListener("click", deleteItem);
-  ItemCard.appendChild(releaseBtn);
+  itemCard.appendChild(releaseBtn);
   if (!list) {
     list = event.target.parentElement.lastElementChild;
   }
