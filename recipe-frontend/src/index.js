@@ -6,7 +6,7 @@ window.addEventListener("load", () => {
   getCategories();
   createNewCategory();
   displaySearch();
-  //searchForCategories();
+
   
 });
 
