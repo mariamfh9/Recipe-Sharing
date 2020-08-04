@@ -5,7 +5,9 @@ const ITEMS_URL = `${BASE_URL}/items`;
 window.addEventListener("load", () => {
   getCategories();
   createNewCategory();
-  searchForCategories();
+  displaySearch();
+  //searchForCategories();
+  
 });
 
 const main = () => {
@@ -70,7 +72,7 @@ const category = {
     name: document.getElementById("name").value,
 };
 
-createNewCategory();
+  createNewCategory();
 
 
 
