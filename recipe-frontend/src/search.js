@@ -1,3 +1,23 @@
+
+
+//const searchForCategories = () => {
+    /*let searchBar = document.getElementById("searchBar");
+  
+    searchBar.addEventListener("keyup", (event) => {
+      let categories = document.querySelectorAll("p");
+      const search = event.target.value.toLowerCase();
+      Array.from(categories).forEach((category) => {
+        let categoryName = category.innerText;
+  
+        if (categoryName.toLowerCase().indexOf(search) > -1) {
+          category.parentElement.style.display = ""; 
+        } else {
+          category.parentElement.style.display = "none"; 
+        }
+      });
+    });*/
+
+//}
 const displaySearch = () => {
   let searchForm = document.getElementById("search-form");
   let html = `
@@ -13,19 +33,18 @@ const displaySearch = () => {
 } //this works
 
 
-
-
 const searchForCategories = () => {
   event.preventDefault();
   console.log("Form clicked");
 
   input = document.getElementById("name"); 
 
+
   fetch(CATEGORIES_URL)
-    .then((response) => response.json())  
-    .then((data) => {   
-    if (data == input){
-      
-    }
-  });
+  .then((response) => response.json())  
+  .then((data) => {   
+    console.log(data); 
+});
 }
+
+
