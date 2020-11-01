@@ -28,13 +28,18 @@ class ItemsController < ApplicationController
   
     # DELETE /items/1
     def destroy
-      @item.destroy
+      #binding.pry
+      if @item.present?
+        @item.destroy
+      end 
     end
   
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_item
-        @item = Item.find(params[:id])
+        #binding.pry
+        @item = Item.find_by(id: params[:id])
+        #binding.pry
       end
   
       # Only allow a trusted parameter "white list" through.
