@@ -5,7 +5,7 @@ const ITEMS_URL = `${BASE_URL}/items`;
 window.addEventListener("load", () => {
   getCategories();
   createNewCategory();
-  displaySearch();
+  //displaySearch();
 
   
 });
@@ -41,7 +41,10 @@ const renderCategoriesCard = (categories) => {
   itemsList.dataset.id = categories.id;
   categoriesCard.appendChild(itemsList);
 
-  categories.items.forEach((item) => renderItems(item, itemsList));
+  categories.items.forEach((item) =>{
+    let i = new Item(item); 
+    i.renderItem(); 
+  });
 };
 
 
@@ -122,12 +125,15 @@ const deleteItem = () => {
   fetch(ITEMS_URL + `/${event.target.dataset.ItemId}`, {
     method: "DELETE",
   }).then(removeItem(event.target.dataset.itemId));
+  
 };
 
 const removeItem = (id) => {
   let cardToRemove = document.getElementById(`item-${id}`);
   cardToRemove.parentElement.removeChild(cardToRemove);
 };
+
+
 
 const displayItemForm = () => {
   let itemForm = document.getElementById("item-form");
@@ -144,7 +150,6 @@ const displayItemForm = () => {
   itemForm.innerHTML = html;
   document.querySelector("form").addEventListener("submit", createItem);
 };
-
 //createNewItem(); 
 
 const createItem = () => {
@@ -168,10 +173,64 @@ const createItem = () => {
       Accept: "application/json",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      return response.json()
+    })
     .then((data) => {
       let item = new Item(data);
       item.renderItem();
       clearForm();
     });
 };
+
+
+
+// fetch category data
+
+// create category objects and store then in an array
+
+// let categories = []
+
+// fetch(CATEGORIES_URL)
+//   .then(r => r.json())
+//   .then(cData => {
+//     cData.forEach(cJson => {
+//       const category = new Category(cJson)
+// //imagine in my category class, I have a display( ) method that can add a category to the DOM
+
+//       category.display()
+//       categories.push(category)
+//   })
+ 
+// })
+
+// document.querySelector('button').addEventListener('click', () => {
+//   console.log(categories)
+// })
+
+
+// function deleteCatgory(categoryToBeDeleted) {
+//   categories = categories.filter(c => {
+//     return  categoryToBeDeleted != c
+//   })
+//   displayCategories()
+// }
+
+// function displayCategories() {
+
+//   // find the div that contains categories and set its innerHTML = ""
+//   categories.forEach(c => {
+//     c.display()
+//   })
+// }
+
+// class Category {
+//   constructor(){
+//     this.items = []
+//   }
+
+//   display() {
+//     // this could display a category but also loop through the items and display those within it
+//   }
+// }
+
